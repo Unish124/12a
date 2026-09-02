@@ -1134,7 +1134,7 @@
 
   <header>
     <div class="header-actions">
-      <a class="header-exam-btn" href="https://12a.unish.info.np/exam-routine.html" aria-label="See exam routine">
+      <a class="header-exam-btn" id="headerExamBtn" href="https://12a.unish.info.np/exam-routine.html" aria-label="See exam routine">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M9 16l2 2 4-4"/></svg>
         Exam routine <span class="new-badge">New</span>
       </a>
@@ -1159,7 +1159,7 @@
     <button id="dayViewBtn" type="button" class="active-mode">Day-by-day</button>
     <button id="weekViewBtn" type="button">Full week</button>
     <button id="teacherViewBtn" type="button">Teacher report</button>
-    <a class="exam-toggle-link" href="https://12a.unish.info.np/exam-routine.html">
+    <a class="exam-toggle-link" id="examToggleLink" href="https://12a.unish.info.np/exam-routine.html">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4"/><path d="M16 2v4"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M3 10h18"/><path d="M9 16l2 2 4-4"/></svg>
       Exam routine <span class="new-badge">New</span>
     </a>
@@ -1625,7 +1625,7 @@
   });
 
   // ---------- SHARE / QR MODAL ----------
-  const SHARE_URL = "https://college.unish.info.np/routine.html";
+  const SHARE_URL = "https://12a.unish.info.np/routine.html";
   const shareSiteBtn = document.getElementById("shareSiteBtn");
   const shareModalBackdrop = document.getElementById("shareModalBackdrop");
   const shareCloseBtn = document.getElementById("shareCloseBtn");
@@ -1959,6 +1959,23 @@
   window.addEventListener("appinstalled", () => {
     installBanner.classList.remove("show");
     floatingInstallBtn.classList.remove("show");
+  });
+
+  // ---------- "NEW" badge on Exam Routine — dismiss for good once clicked ----------
+  const EXAM_NEW_SEEN_KEY = "examRoutineNewSeen";
+  function hideExamNewBadges() {
+    document.querySelectorAll(".new-badge").forEach(el => el.remove());
+  }
+  function markExamRoutineSeen() {
+    try { localStorage.setItem(EXAM_NEW_SEEN_KEY, "1"); } catch (e) {}
+    hideExamNewBadges();
+  }
+  try {
+    if (localStorage.getItem(EXAM_NEW_SEEN_KEY) === "1") hideExamNewBadges();
+  } catch (e) {}
+  ["examRoutineLink", "headerExamBtn", "examToggleLink"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("click", markExamRoutineSeen);
   });
 </script>
 </body>
